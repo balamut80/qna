@@ -79,7 +79,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     context 'valid attributes' do
-      it 'assings the requested question to @question' do
+      it 'assigns the requested question to @question' do
         patch :update, id: question, question: attributes_for(:question)
         expect(assigns(:question)).to eq question
       end

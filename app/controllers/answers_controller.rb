@@ -10,7 +10,7 @@ class AnswersController < ApplicationController
   end
 
   def new
-    @answer = @question.answers.new
+    @answer = Answer.new
   end
 
   def edit
@@ -44,9 +44,11 @@ class AnswersController < ApplicationController
   def load_question
     @question = Question.find(params[:question_id])
   end
+
   def load_answer
     @answer = @question.answers.find(params[:id])
   end
+
   def answer_params
     params.require(:answer).permit(:title, :body, :question_id, :user_id)
   end
