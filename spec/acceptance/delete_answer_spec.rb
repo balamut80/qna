@@ -4,11 +4,11 @@ feature 'Delete Answer' do
 
 	given(:user) { create(:user) }
 	given(:other_user) { create(:user) }
-	given(:question) { create(:question) }
-	given(:answer) { create :answer, question: question, user: user }
+	given(:question) { create(:question, user: user) }
 
 	scenario 'Authenticated user try delete his answer' do
 		sign_in(user)
+		create(:answer, question: question, user: user)
 		visit question_path(question)
 		click_on 'Delete answer'
 

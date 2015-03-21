@@ -10,7 +10,7 @@ feature 'Create Answer' do
 		visit question_path(question)
 		click_on 'Answer'
 		fill_in 'Text', with: 'Answer text'
-		click_on 'Create answer'
+		click_on 'Create Answer'
 
 		expect(page).to have_content 'Your answer successfully created.'
 	end

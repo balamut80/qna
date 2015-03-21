@@ -4,7 +4,7 @@ feature 'Delete questions' do
 
 	given(:user) { create(:user) }
 	given(:other_user) { create(:user) }
-	given(:question) { create :question, user: user}
+	given(:question) { create :question, user: user }
 
 	scenario 'Authenticated user try delete his question' do
 		sign_in(user)

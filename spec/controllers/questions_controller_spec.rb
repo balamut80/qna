@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
+  let(:question) { create(:question, user: @user) }
+  let(:others_question) { create(:question) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
-
     before { get :index }
 
     it 'populates an array of all questions' do
@@ -80,48 +80,19 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'PATCH #update' do
-    sign_in_user
-    context 'valid attributes' do
-      it 'assigns the requested question to @question' do
-        patch :update, id: question, question: attributes_for(:question)
-        expect(assigns(:question)).to eq question
-      end
-
-      it 'changes question attributes' do
-        patch :update, id: question, question: { title: 'new title', body: 'new body'}
-        question.reload
-        expect(question.title).to eq 'new title'
-        expect(question.body).to eq 'new body'
-      end
-
-      it 'redirects to the updated question' do
-        patch :update, id: question, question: attributes_for(:question)
-        expect(response).to redirect_to question
-      end
-    end
-
-    context 'invalid attributes' do
-      before { patch :update, id: question, question: { title: 'new title', body: nil} }
-
-      it 'does not change question attributes' do
-        question.reload
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'MyText'
-      end
-
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
-      end
-    end
-  end
-
   describe 'DELETE #destroy' do
     sign_in_user
-    before { question }
+    before {
+      question
+      others_question
+    }
 
-    it 'deletes question' do
+    it 'deletes his question' do
       expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+    end
+
+    it 'deletes other user question' do
+      expect { delete :destroy, id: others_question }.to_not change(Question, :count)
     end
 
     it 'redirect to index view' do
