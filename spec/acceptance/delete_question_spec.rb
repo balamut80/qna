@@ -12,6 +12,8 @@ feature 'Delete questions' do
 		click_on 'Delete question'
 
 		expect(page).to have_content 'Question has been successfully deleted'
+		expect(page).to_not have_content question.title
+		expect(page).to_not have_content question.body
 	end
 
 	scenario 'Authenticated user try delete others question' do

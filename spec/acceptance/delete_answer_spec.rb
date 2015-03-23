@@ -5,14 +5,15 @@ feature 'Delete Answer' do
 	given(:user) { create(:user) }
 	given(:other_user) { create(:user) }
 	given(:question) { create(:question, user: user) }
+	given!(:answer) { create :answer, question: question, user: user }
 
 	scenario 'Authenticated user try delete his answer' do
 		sign_in(user)
-		create(:answer, question: question, user: user)
 		visit question_path(question)
 		click_on 'Delete answer'
 
 		expect(page).to have_content 'Answer has been successfully deleted'
+		expect(page).to_not have_content answer.body
 	end
 
 	scenario 'Authenticated user try delete others answer' do

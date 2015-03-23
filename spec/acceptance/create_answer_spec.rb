@@ -13,6 +13,9 @@ feature 'Create Answer' do
 		click_on 'Create Answer'
 
 		expect(page).to have_content 'Your answer successfully created.'
+		within '.answers' do
+			expect(page).to have_content 'Answer text'
+		end
 	end
 
 	scenario 'Non-authenticated user try to create answer' do

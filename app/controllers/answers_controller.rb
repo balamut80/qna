@@ -8,10 +8,9 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @user = current_user
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
-    @answer.user = @user
+    @answer.user = current_user
     if @answer.save
       flash[:notice] = 'Your answer successfully created.'
       redirect_to question_path(@question)
