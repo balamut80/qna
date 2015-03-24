@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
     @answer.user = current_user
     if @answer.save
       flash[:notice] = 'Your answer successfully created.'
-      redirect_to question_path(@question)
+      redirect_to @question
     else
       render :new
     end
@@ -26,7 +26,7 @@ class AnswersController < ApplicationController
     else
       flash[:notice] = 'You can\'t delete this question.'
     end
-    redirect_to question_path(@question)
+    redirect_to @question
   end
 
   private
