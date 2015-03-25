@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
   let(:answer) { create(:answer, question: question, user: @user) }
-  let(:others_answer) { create(:answer, question: question) }
 
   describe 'GET #new' do
     sign_in_user
@@ -45,10 +44,8 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'DELETE #destroy' do
     sign_in_user
-    before {
-      answer
-      others_answer
-    }
+    let!(:answer) { create(:answer, question: question, user: @user) }
+    let!(:others_answer) { create(:answer, question: question) }
 
     it 'deletes his answer' do
       expect { delete :destroy, question_id: question, id: answer }.to change(Answer, :count).by(-1)
