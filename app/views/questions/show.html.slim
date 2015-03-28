@@ -5,8 +5,7 @@ p= @question.body
   p= link_to 'Delete question', @question, method: :delete, data: { confirm: 'Are you sure?' }
 
 .answers
-  - @question.answers.each do |answer|
-    = render partial: 'answers/answer', locals: {answer: answer}
+  = render 'answers'
 
 = form_for [ @question, @answer ], remote: true do |f|
   = f.label :body, 'Text'
