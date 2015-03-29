@@ -3,19 +3,10 @@ class AnswersController < ApplicationController
   before_action :load_question
   before_action :load_answer, only: [:destroy]
 
-  def new
-    @answer = Answer.new
-  end
-
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
-    if @answer.save
-      flash[:notice] = 'Your answer successfully created.'
-      redirect_to @question
-    else
-      render :new
-    end
+    @answer.save
   end
 
   def destroy

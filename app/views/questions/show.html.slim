@@ -4,9 +4,10 @@ p= @question.body
 - if user_signed_in? && current_user.id == @question.user_id
   p= link_to 'Delete question', @question, method: :delete, data: { confirm: 'Are you sure?' }
 
-- @question.answers.each do |answer|
-  .answers
-    p= answer.body
-    - if user_signed_in? && current_user.id == @question.user_id
-      p= link_to 'Delete answer', question_answer_path(@question, answer.id), method: :delete, data: {confirm: 'Are you sure?'}
-= link_to 'Answer', new_question_answer_path(@question)
+.answers
+  = render 'answers'
+
+= form_for [ @question, @answer ], remote: true do |f|
+  = f.label :body, 'Text'
+  = f.text_area :body
+  p= f.submit
