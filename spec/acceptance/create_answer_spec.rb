@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Create Answer' do
 
@@ -15,6 +15,15 @@ feature 'Create Answer' do
 		within '.answers' do
 			expect(page).to have_content 'Answer text'
 		end
+	end
+
+	scenario 'Authenticated user try to create invalid answer', js: true do
+		sign_in(user)
+		visit question_path(question)
+
+		click_on 'Create Answer'
+
+		expect(page).to have_content 'Body is too short'
 	end
 
 	scenario 'Non-authenticated user try to create answer' do

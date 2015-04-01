@@ -9,5 +9,6 @@ p= @question.body
 
 = form_for [ @question, @answer ], remote: true do |f|
   = f.label :body, 'Text'
+  .answer-errors
   = f.text_area :body
   p= f.submit
