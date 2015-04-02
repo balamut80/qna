@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question
-  before_action :load_answer, only: [:destroy, :update]
+  before_action :load_answer, only: [:destroy, :update, :best]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -10,17 +10,18 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params)
+    @answer.update(answer_params) if @answer.user_id == current_user.id
   end
 
   def destroy
-    if @answer.user_id == current_user.id
-      @answer.destroy
-      flash[:notice] = 'Answer has been successfully deleted.'
-    else
-      flash[:notice] = 'You can\'t delete this question.'
+    @answer.destroy if @answer.user_id == current_user.id
+  end
+
+  def best
+    if @question.user_id == current_user.id
+      @question.answers.update_all best: false
+      @answer.update_attribute(:best, true)
     end
-    redirect_to @question
   end
 
   private

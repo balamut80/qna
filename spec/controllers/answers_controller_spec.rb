@@ -38,7 +38,7 @@ RSpec.describe AnswersController, type: :controller do
       expect(assigns(:answer)).to eq answer
     end
 
-    it 'assigns th question' do
+    it 'assigns the question' do
       patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
       expect(assigns(:question)).to eq question
     end
@@ -55,22 +55,62 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #best' do
+    sign_in_user
+    let!(:other_user) { create :user }
+    let!(:question) { create :question, user: @user }
+    let!(:other_question) { create :question, user: other_user }
+
+    let!(:other_user_answer) { create(:answer, question: question, user: other_user) }
+    let!(:user_answer) { create(:answer, question: question, user: @user) }
+
+    let!(:other_question_other_user_answer) { create(:answer, question: other_question, user: other_user) }
+    let!(:other_question_user_answer) { create(:answer, question: other_question, user: @user) }
+
+    context 'question author' do
+
+      before do
+        patch :best, id: other_user_answer, question_id: question, format: :js
+      end
+
+      it 'sets the best answer' do
+        other_user_answer.reload
+        expect(other_user_answer).to be_best
+      end
+
+      it 'renders best template' do
+        expect(response).to render_template :best
+      end
+    end
+
+    context 'other user question' do
+      before do
+        patch :best, id: other_question_other_user_answer, question_id: other_question, format: :js
+      end
+
+      it 'can\'t make best answer' do
+        other_question_other_user_answer.reload
+        expect(other_question_other_user_answer).not_to be_best
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     sign_in_user
     let!(:answer) { create(:answer, question: question, user: @user) }
     let!(:others_answer) { create(:answer, question: question) }
 
     it 'deletes his answer' do
-      expect { delete :destroy, question_id: question, id: answer }.to change(Answer, :count).by(-1)
+      expect { delete :destroy, question_id: question, id: answer, format: :js }.to change(Answer, :count).by(-1)
     end
 
     it 'deletes other user answer' do
-      expect { delete :destroy, question_id: question, id: others_answer }.to_not change(Answer, :count)
+      expect { delete :destroy, question_id: question, id: others_answer, format: :js }.to_not change(Answer, :count)
     end
 
     it 'redirects to index view' do
-      delete :destroy, question_id: question, id: answer
-      expect(response).to redirect_to question_path(question)
+      delete :destroy, question_id: question, id: answer, format: :js
+      expect(response).to render_template :destroy
     end
   end
 end
