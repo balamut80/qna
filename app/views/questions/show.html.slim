@@ -2,7 +2,7 @@ h1= @question.title
 p= @question.body
 
 h3 Answers
-ul class="answers" = render 'answers/answers', answers: @question.answers
+ul class="answers" = render @question.answers
 
 = form_for [ @question, @answer ], remote: true do |f|
   = f.label :body, 'Text'
