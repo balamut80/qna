@@ -1,13 +1,11 @@
 h1= @question.title
 p= @question.body
 
-- if user_signed_in? && current_user.id == @question.user_id
-  p= link_to 'Delete question', @question, method: :delete, data: { confirm: 'Are you sure?' }
-
-.answers
-  = render 'answers'
+h3 Answers
+ul class="answers" = render @question.answers
 
 = form_for [ @question, @answer ], remote: true do |f|
   = f.label :body, 'Text'
+  .answer-errors
   = f.text_area :body
   p= f.submit

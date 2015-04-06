@@ -3,6 +3,7 @@
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('ul.answers').append("<%= j render @answer %>");
-  $('form#new_answer #answer_body').val('');
+  answer = $(".answer[id='answer-<%= @answer.id %>']");
+  html = $("<%= j render @answer %>");
+  answer.html(html.children());
 <% end %>

@@ -85,16 +85,16 @@ RSpec.describe QuestionsController, type: :controller do
     let!(:others_question) { create(:question) }
 
     it 'deletes his question' do
-      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+      expect { delete :destroy, id: question, format: :js  }.to change(Question, :count).by(-1)
     end
 
     it 'deletes other user question' do
-      expect { delete :destroy, id: others_question }.to_not change(Question, :count)
+      expect { delete :destroy, id: others_question, format: :js  }.to_not change(Question, :count)
     end
 
     it 'redirect to index view' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+      delete :destroy, id: question, format: :js
+      expect(response).to render_template :destroy
     end
   end
 end
