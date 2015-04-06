@@ -26,12 +26,15 @@ feature 'Best answer' do
 		scenario 'try to make best answer', js: true do
 
 			within "#answer-#{answer.id}" do
+				expect(page).to_not have_content 'This is the best answer!'
 				click_on 'Mark as best answer!'
 			end
-			first_answer = page.find('.answers .answer:first-child')
-
 			expect(page).to have_selector('.answer', count: 3)
-			expect(first_answer).to have_content answer.body
+
+			within "#answer-#{answer.id}" do
+				expect(page).to have_content answer.body
+				expect(page).to have_content 'This is the best answer!'
+      end
 		end
 	end
 

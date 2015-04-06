@@ -3,5 +3,7 @@
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('.answers').html('<%= j render 'questions/answers' %>');
+  answer = $(".answer[id='answer-<%= @answer.id %>']");
+  html = $("<%= j render @answer %>");
+  answer.html(html.children());
 <% end %>

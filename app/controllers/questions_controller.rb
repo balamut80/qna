@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
   before_action :load_question, only: [:show, :edit, :update, :destroy]
 
   def index
-    @questions = Question.all.order('created_at DESC')
+    @questions = Question.all
   end
 
   def show
@@ -29,7 +29,7 @@ class QuestionsController < ApplicationController
 
   def update
     @question.update(question_params) if @question.user_id == current_user.id
-    @questions = Question.all.order('created_at DESC')
+    @questions = Question.all
   end
 
   def destroy

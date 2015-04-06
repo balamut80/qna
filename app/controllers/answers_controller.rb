@@ -18,10 +18,7 @@ class AnswersController < ApplicationController
   end
 
   def best
-    if @question.user_id == current_user.id
-      @question.answers.update_all best: false
-      @answer.update_attribute(:best, true)
-    end
+    @answer.best! if @question.user_id == current_user.id
   end
 
   private
