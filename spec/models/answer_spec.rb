@@ -7,10 +7,12 @@ RSpec.describe Answer, type: :model do
   let!(:best_answer) { create(:answer, question: question) }
   let!(:other_best_answer) { create(:answer, question: question) }
 
-
   it { should validate_presence_of :body }
   it { should validate_length_of(:body).is_at_least(5).is_at_most(2000) }
   it { should belong_to :question }
+
+  it { should have_many :attachments }
+  it { should accept_nested_attributes_for :attachments }
 
   describe 'Make best answer' do
     before do

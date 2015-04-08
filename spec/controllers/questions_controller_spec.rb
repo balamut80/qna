@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question, user: @user) }
+  let(:answer) { create(:answer, question: question, user: @user) }
+
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
@@ -23,6 +25,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
+    it 'builds new attachment for answer' do
+      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
+    end
+
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -34,6 +40,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
+    end
+
+    it 'builds new attachment for question' do
+      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     end
 
     it 'renders new view' do

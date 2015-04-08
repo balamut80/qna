@@ -7,13 +7,11 @@ feature 'Add files to question', %q{
 } do
 
 	given(:user) { create(:user) }
-
-	background do
-		sign_in(user)
-		visit '/questions'
-	end
+	given!(:question) { create :question, user: user }
 
 	scenario 'User adds file when asks question' do
+		sign_in(user)
+		visit '/questions'
 		click_on 'Ask question'
 		fill_in 'Title', with: question.title
 		fill_in 'Text', with: question.body

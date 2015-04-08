@@ -4,6 +4,9 @@
       - if answer.best
        h4= 'This is the best answer!'
       p= answer.body
+      ul
+        - answer.attachments.each do |a|
+          li= link_to a.file.identifier, a.file.url
       - if user_signed_in? && current_user.id == answer.user_id
         p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
         p
