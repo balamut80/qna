@@ -24,4 +24,20 @@ feature 'Add files to answer', %q{
 			expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
 		end
 	end
+
+	scenario 'User adds 2 files to answer', js: true do
+		click_on 'Add file'
+		file_inputs = page.all('input[type="file"]')
+		fill_in 'Text', with: 'Answer text'
+
+		file_inputs[0].set "#{Rails.root}/spec/spec_helper.rb"
+		file_inputs[1].set "#{Rails.root}/spec/rails_helper.rb"
+
+		click_on 'Create Answer'
+
+		within '.answers' do
+			expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
+			expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
+		end
+	end
 end
