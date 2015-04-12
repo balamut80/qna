@@ -15,16 +15,6 @@ feature 'Add files to answer', %q{
 		visit question_path(question)
 	end
 
-	scenario 'User adds file to answer', js: true do
-		fill_in 'Text', with: 'Answer text'
-		attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
-		click_on 'Create Answer'
-
-		within '.answers' do
-			expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
-		end
-	end
-
 	scenario 'User adds 2 files to answer', js: true do
 		click_on 'Add file'
 		file_inputs = page.all('input[type="file"]')
