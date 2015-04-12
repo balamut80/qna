@@ -34,7 +34,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'slim-rails'
 gem 'bootstrap-sass'
 gem 'devise'
-
+gem 'carrierwave'
+gem 'remotipart'
+gem 'nested_form'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

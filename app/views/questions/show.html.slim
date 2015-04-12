@@ -1,11 +1,28 @@
 h1= @question.title
 p= @question.body
 
+p Attachments:
+ul class="question-attachments"
+  - @question.attachments.each do |a|
+    li id="attachment-#{a.id}"
+      = link_to a.file.identifier, a.file.url
+      '  -
+      - if user_signed_in? && current_user.id == @question.user_id
+        = link_to 'remove', a, remote: true, method: :delete
+
 h3 Answers
 ul class="answers" = render @question.answers
 
-= form_for [ @question, @answer ], remote: true do |f|
-  = f.label :body, 'Text'
-  .answer-errors
-  = f.text_area :body
-  p= f.submit
+= nested_form_for [@question, @answer], remote: true do |f|
+  p
+    = f.label :body, 'Text'
+    .answer-errors
+    = f.text_area :body
+  p Attachments:
+  p
+    = f.fields_for :attachments do |a|
+      = a.label :file
+      = a.file_field :file
+      = a.link_to_remove "Remove"
+    = f.link_to_add 'Add file', :attachments
+  = f.submit

@@ -3,14 +3,16 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
   let!(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
-  let!(:answers) { create_list(:answer, 5, question: question) }
-  let!(:best_answer) { create(:answer, question: question) }
+  let!(:answers) { create_list(:answer, 5, question: question, best: false) }
+  let!(:best_answer) { create(:answer, question: question, best: false) }
   let!(:other_best_answer) { create(:answer, question: question) }
-
 
   it { should validate_presence_of :body }
   it { should validate_length_of(:body).is_at_least(5).is_at_most(2000) }
   it { should belong_to :question }
+
+  it { should have_many :attachments }
+  it { should accept_nested_attributes_for :attachments }
 
   describe 'Make best answer' do
     before do

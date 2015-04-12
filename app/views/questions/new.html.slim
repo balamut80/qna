@@ -1,6 +1,14 @@
-= form_for @question do |f|
+= nested_form_for @question do |f|
   = f.label :title
   = f.text_field :title
   = f.label :body, 'Text'
   = f.text_area :body
+
+  p Attachments:
+  p
+    = f.fields_for :attachments do |a|
+      = a.label :file
+      = a.file_field :file
+      = a.link_to_remove "Remove"
+    = f.link_to_add 'Add file', :attachments
   = f.submit 'Create'
