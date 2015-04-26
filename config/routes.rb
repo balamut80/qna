@@ -1,8 +1,18 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :questions do
+
+    member do
+      post :vote
+      post :unvote
+    end
+
     resources :answers do
-      put :best, on: :member
+      member do
+        put :best
+        post :vote
+        post :unvote
+      end
     end
   end
 

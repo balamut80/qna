@@ -7,9 +7,11 @@ RSpec.describe Question, type: :model do
   it { should validate_presence_of :body }
   it { should validate_length_of(:body).is_at_least(5).is_at_most(2000) }
   it { should have_many(:answers).dependent :destroy }
+
   it { should have_many :attachments }
   it { should accept_nested_attributes_for :attachments }
 
+  it { should have_many(:votes).dependent(:destroy) }
 
   # it 'validates presence of title' do
   #   expect(Question.new(body: 'body text')).to_not be_valid

@@ -1,8 +1,0 @@
-<% if @answer.errors.present? %>
-  <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').html('<%= j message %>');
-  <% end %>
-<% else %>
-  $('ul.answers').append("<%= j render @answer %>");
-  $('form#new_answer #answer_body').val('');
-<% end %>

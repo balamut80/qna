@@ -2,8 +2,18 @@
   li class="answer_row"
     div id="answer-#{answer.id}" class="answer"
       - if answer.best
-       h4= 'This is the best answer!'
-      p= answer.body
+        h4= 'This is the best answer!'
+
+      div class="answer-body" = answer.body
+      div class="total-votes" = answer.total_votes
+      - if user_signed_in? && current_user.id != answer.user_id
+        div class="vote"
+          - if answer.voted_by?(current_user)
+            p= link_to 'Unvote', unvote_question_answer_path(@question.id, answer), class: 'unvote-link', method: :post, remote: true
+          - else
+            p= link_to 'Like', vote_question_answer_path(@question.id, answer, value: 1), class: 'vote-link', method: :post, remote: true
+            p= link_to 'Dislike', vote_question_answer_path(@question.id, answer, value: -1), class: 'vote-link', method: :post, remote: true
+
       ul class="answer-attachments"
         - answer.attachments.each do |a|
           li id="attachment-#{a.id}"

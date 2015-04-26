@@ -4,7 +4,6 @@ RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question, user: @user) }
   let(:answer) { create(:answer, question: question, user: @user) }
 
-
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
     before { get :index }
@@ -106,6 +105,60 @@ RSpec.describe QuestionsController, type: :controller do
       delete :destroy, id: question, format: :js
       expect(response).to render_template :destroy
     end
+  end
+
+  describe 'POST #vote' do
+    let!(:user) { create(:user) }
+    let!(:question) { create(:question, user: user) }
+    let!(:other_user) { create(:user) }
+
+    context 'question non-author' do
+      before { sign_in(other_user) }
+
+      it 'likes question' do
+        expect { post :vote, id: question, value: 1, format: :json }.to change(question.votes, :count).by(1)
+      end
+
+      it 'dislikes question' do
+        expect { post :vote, id: question, value: -1, format: :json }.to change(question.votes, :count).by(1)
+      end
+    end
+
+    context 'question author' do
+      before { sign_in(user) }
+
+      it 'can\'t vote question' do
+        expect { post :vote, id: question, value: 1, format: :json }.not_to change(question.votes, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe 'POST #unvote' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let(:other_user) { create(:user) }
+
+    context 'question non-author' do
+      before {
+        sign_in(other_user)
+        create(:vote, user_id: other_user.id, votable_id: question.id, votable_type: question.class.name)
+      }
+
+      it 'unvote question' do
+        expect { post :unvote, id: question, format: :json}.to change(question.votes, :count).by(-1)
+      end
+    end
+
+    context 'question author' do
+      before { sign_in(user) }
+
+      it 'can\'t unvote question' do
+        expect { post :unvote, id: question, format: :json }.not_to change(question.votes, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
   end
 end
 
