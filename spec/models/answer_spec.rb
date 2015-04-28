@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
+
+  it_behaves_like 'votable'
+
   let!(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
   let!(:answers) { create_list(:answer, 5, question: question, best: false) }
