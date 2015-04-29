@@ -15,4 +15,5 @@
 //= require jquery.remotipart
 //= require jquery_nested_form
 //= require turbolinks
+//= require jquery.tmpl.min
 //= require_tree .

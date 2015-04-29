@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
+
+  it_behaves_like 'votable'
+
   let!(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
   let!(:answers) { create_list(:answer, 5, question: question, best: false) }
@@ -13,6 +16,8 @@ RSpec.describe Answer, type: :model do
 
   it { should have_many :attachments }
   it { should accept_nested_attributes_for :attachments }
+
+  it { should have_many(:votes).dependent(:destroy) }
 
   describe 'Make best answer' do
     before do

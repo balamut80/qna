@@ -1,0 +1,43 @@
+<script id="answerTmpl" type="text/x-jquery-tmpl">
+<li class="answer_row">
+  <div class="answer" id="answer-${answer.id}">
+    <div class="answer-body">
+      ${answer.body}
+    </div>
+    <div class="total-votes">
+      ${total}
+    </div>
+    <div class="vote">
+      <p>
+        <a class="vote-link" data-remote="true" rel="nofollow" data-method="post" href="/questions/${answer.question_id}/answers/${answer.id}/vote?value=1">Like</a>
+      </p>
+      <p>
+        <a class="vote-link" data-remote="true" rel="nofollow" data-method="post" href="/questions/${answer.question_id}/answers/${answer.id}/vote?value=-1">Dislike</a>
+      </p>
+    </div>
+    <ul class="answer-attachments">
+     {%each attachments%}
+       <li id="attachment-${id}">
+         <a href="${file.url}">${file.url}</a> - <a data-remote="true" rel="nofollow" data-method="delete" href="/attachments/${id}">remove</a>
+       </li>
+     {%/each%}
+    </ul>
+    <p>
+      <a class="edit-answer-link" data-answer-id="${answer.id}" href="">Edit</a>
+    </p>
+    <p>
+      <form id="edit-answer-${answer.id}" class="edit_answer" action="/questions/${answer.question_id}/answers/${answer.id}" accept-charset="UTF-8" data-remote="true" method="post">
+        <input name="utf8" type="hidden" value="✓">
+        <input type="hidden" name="_method" value="patch">
+        <label for="answer_body">Answer</label>
+        <textarea name="answer[body]" id="answer_body">${answer.body}</textarea>
+        <input type="submit" name="commit" value="Save"></form>
+    </p>
+    <p>
+      <a data-remote="true" rel="nofollow" data-method="delete" href="/questions/${answer.question_id}/answers/${answer.id}">Delete answer</a>
+    </p>
+    <p>
+      <a data-remote="true" rel="nofollow" data-method="put" href="/questions/${answer.question_id}/answers/${answer.id}/best">Mark as best answer!</a>
+    </p>
+  </div>
+</script>
