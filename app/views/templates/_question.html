@@ -1,0 +1,26 @@
+<script id="questionTmpl" type="text/x-jquery-tmpl">
+  <div id="question-${id}">
+  <p>
+    <a href="/questions/${id}">${title}</a>
+  </p>
+  <p>
+    <a class="edit-question-link" data-question-id="${id}" href="">Edit</a>
+  </p>
+  <form id="edit-question-${id}" class="edit_question" action="/questions/${id}" accept-charset="UTF-8" data-remote="true" method="post">
+    <input name="utf8" type="hidden" value="✓">
+    <input type="hidden" name="_method" value="patch">
+
+    <label for="question_title">Title</label>
+    <input type="text" value="${title}" name="question[title]" id="question_title">
+
+    <label for="question_body">Question</label>
+    <textarea name="question[body]" id="question_body">${body}</textarea>
+
+    <input type="submit" name="commit" value="Save"></form>
+  <p></p>
+  <p>
+    <a data-remote="true" rel="nofollow" data-method="delete" href="/questions/${id}">Delete question</a>
+  </p>
+  <br>
+</div>
+</script>

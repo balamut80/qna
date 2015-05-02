@@ -22,7 +22,7 @@ div id="question-#{@question.id}" class="question"
           = link_to 'remove', a, remote: true, method: :delete
 
   h3 Answers
-  ul class="answers" = render @question.answers
+  ul class="answers" data-question-id=@question.id = render @question.answers
 
   = nested_form_for [@question, @answer], remote: true, data: { type: :json } do |f|
     p
@@ -37,5 +37,7 @@ div id="question-#{@question.id}" class="question"
         = a.link_to_remove "Remove"
       = f.link_to_add 'Add file', :attachments
     = f.submit
+
+  = subscribe_to "/questions/#{@question.id}/answers"
 
   = render 'templates/answer'
