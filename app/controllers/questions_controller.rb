@@ -31,7 +31,7 @@ class QuestionsController < ApplicationController
           redirect_to @question
         end
       else
-        render :new
+        format.html { render 'new'}
       end
     end
   end

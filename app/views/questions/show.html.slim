@@ -21,13 +21,17 @@ div id="question-#{@question.id}" class="question"
         - if user_signed_in? && current_user.id == @question.user_id
           = link_to 'remove', a, remote: true, method: :delete
 
+
+  p= render 'comments/index', resource: @question
+  p= render 'comments/form', resource: @question
+
   h3 Answers
   ul class="answers" data-question-id=@question.id = render @question.answers
 
   = nested_form_for [@question, @answer], remote: true, data: { type: :json } do |f|
+    .answer-errors
     p
       = f.label :body, 'Text'
-      .answer-errors
       = f.text_area :body
     p Attachments:
     p
@@ -39,5 +43,7 @@ div id="question-#{@question.id}" class="question"
     = f.submit
 
   = subscribe_to "/questions/#{@question.id}/answers"
+  = subscribe_to "/questions/#{@question.id}/comments"
 
   = render 'templates/answer'
+  = render 'templates/comment'

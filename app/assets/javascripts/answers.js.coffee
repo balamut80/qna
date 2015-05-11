@@ -42,20 +42,22 @@ $(document).on 'ajax:success', '.unvote-link', (e, data, status, xhr) ->
   vote.html(html_source_like + html_source_dislike)
 
 $ ->
-  $('form.new_answer').bind 'ajax:success', (e, data, status, xhr) ->
-    questionId = $('.answers').data('questionId');
-    channel = '/questions/' + questionId + '/answers'
-    PrivatePub.subscribe channel, (data, channel) ->
-      answer_data =
-        answer: $.parseJSON(data['answer'])
-        attachments: $.parseJSON(data['attachments'])
-      $('#answerTmpl').tmpl(answer_data).appendTo('.answers');
-      $('form#new_answer #answer_body').val('');
-
   $('form.new_answer').bind 'ajax:error', (e, xhr, status, error) ->
     errors = $.parseJSON(xhr.responseText)
+    $('.answer-errors').html('')
     $.each errors, (index, value) ->
-      $('.answer-errors').append value
+      $('.answer-errors').append value + "<br>"
+    return
+
+  questionId = $('.answers').data('questionId');
+  channel = '/questions/' + questionId + '/answers'
+  PrivatePub.subscribe channel, (data, channel) ->
+    answer_data =
+      answer: $.parseJSON(data['answer'])
+      attachments: $.parseJSON(data['attachments'])
+      total: $.parseJSON(data['total'])
+    $('#answerTmpl').tmpl(answer_data).appendTo('.answers');
+    $('form#new_answer #answer_body').val('');
 
 
 

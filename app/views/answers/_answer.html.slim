@@ -32,3 +32,6 @@
         p= link_to 'Delete answer', question_answer_path(@question, answer), method: :delete, remote: true
       - if user_signed_in? && current_user.id == @question.user_id && !answer.best
         p= link_to 'Mark as best answer!', best_question_answer_path(@question, answer), method: :put, remote: true
+
+        p= render 'comments/index', resource: answer
+        p= render 'comments/form', resource: answer

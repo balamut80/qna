@@ -9,9 +9,15 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :voted do
+    resources :comments, defaults: { commentable: 'questions' }
+
     resources :answers, concerns: :voted do
       put :best, on: :member
     end
+  end
+
+  resources :answers, only: [] do
+    resources :comments, defaults: { commentable: 'answers' }
   end
 
   resources :attachments, only: :destroy

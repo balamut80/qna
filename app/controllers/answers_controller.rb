@@ -9,7 +9,6 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
-
     respond_to do |format|
       if @answer.save
         format.js do
@@ -21,7 +20,6 @@ class AnswersController < ApplicationController
         end
       else
         format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
-        format.js
       end
     end
   end
