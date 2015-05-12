@@ -10,12 +10,7 @@ RSpec.describe AnswersController, type: :controller do
     sign_in_user
     context 'with valid attributes' do
       it 'saves the new answer in the database' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :json }.to change(question.answers, :count).by(1)
-      end
-
-      it 'redirects to show view' do
-        post :create, question_id: question, answer: attributes_for(:answer), format: :json
-        expect(response.header['Content-Type']).to include 'application/json'
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }.to change(question.answers, :count).by(1)
       end
     end
 

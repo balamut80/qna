@@ -5,7 +5,6 @@ $(document).on 'click', '.edit-answer-link', (e) ->
   $('form#edit-answer-' + answer_id).show()
   return
 
-
 $(document).on 'ajax:success', 'form.edit_answer', (e, data, status, xhr) ->
   answer = xhr.responseJSON.answer
   $(".answer[id='answer-" + answer.id + "'] .answer-body").text(answer.body);
@@ -42,20 +41,23 @@ $(document).on 'ajax:success', '.unvote-link', (e, data, status, xhr) ->
     html_source_dislike = '<p><a class="vote-link" data-remote="true" rel="nofollow" data-method="post" href="/questions/' + resource.id + '/vote?value=-1">Dislike</a><p>'
   vote.html(html_source_like + html_source_dislike)
 
-$(document).ready ->
-  $('form.new_answer').bind 'ajax:success', (e, data, status, xhr) ->
+$ ->
+  $('form.new_answer').bind 'ajax:error', (e, xhr, status, error) ->
+    errors = $.parseJSON(xhr.responseText)
+    $('.answer-errors').html('')
+    $.each errors, (index, value) ->
+      $('.answer-errors').append value + "<br>"
+    return
+
+  questionId = $('.answers').data('questionId');
+  channel = '/questions/' + questionId + '/answers'
+  PrivatePub.subscribe channel, (data, channel) ->
     answer_data =
-      answer: xhr.responseJSON.answer
-      attachments: xhr.responseJSON.attachments
+      answer: $.parseJSON(data['answer'])
+      attachments: $.parseJSON(data['attachments'])
+      total: $.parseJSON(data['total'])
     $('#answerTmpl').tmpl(answer_data).appendTo('.answers');
     $('form#new_answer #answer_body').val('');
-
-  $('form.new_answer').bind 'ajax:error', (e, xhr, status, error) ->
-    errors = undefined
-    errors = $.parseJSON(xhr.responseText)
-    $.each errors, (index, value) ->
-      $('.answer-errors').append value
-  return
 
 
 
