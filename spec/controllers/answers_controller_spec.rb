@@ -47,8 +47,8 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     it 'render update template' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :json
-      expect(response.header['Content-Type']).to include 'application/json'
+      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      expect(response).to render_template :update
     end
   end
 
