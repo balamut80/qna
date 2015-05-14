@@ -1,0 +1,4 @@
+$('.answer-errors').remove();
+<% @answer.errors.full_messages.each do |msg| %>
+  $('.answer-errors').before('<p><%= j msg %></p>');
+<% end %>

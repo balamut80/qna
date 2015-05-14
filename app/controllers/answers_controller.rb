@@ -11,7 +11,7 @@ class AnswersController < ApplicationController
   include Voted
 
   def create
-    respond_with @answer = @question.answers.create(answer_params.merge(user: current_user)) if @question.valid?
+    respond_with @answer = @question.answers.create(answer_params.merge(user: current_user))
   end
 
   def update
@@ -55,9 +55,6 @@ class AnswersController < ApplicationController
   end
 
   def publish_answer
-    PrivatePub.publish_to "/questions/#{@question.id}/answers",
-                          answer: @answer.to_json,
-                          attachments: @answer.attachments.to_json,
-                          total: @answer.total_votes.to_json
+    PrivatePub.publish_to "/questions/#{@question.id}/answers", answer: @answer.to_json, attachments: @answer.attachments.to_json, total: @answer.total_votes.to_json if @answer.valid?
   end
 end

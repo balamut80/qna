@@ -16,12 +16,12 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not save new answer in the database' do
-        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :json }.to_not change(Answer, :count)
+        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }.to_not change(Answer, :count)
       end
 
       it 're-renders new view' do
-        post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :json
-        expect(response.header['Content-Type']).to include 'application/json'
+        post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
+        expect(response).to render_template :create
       end
     end
   end
@@ -31,17 +31,17 @@ RSpec.describe AnswersController, type: :controller do
     let!(:answer) { create(:answer, question: question, user: @user) }
 
     it 'assings the requested answer to @answer' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :json
+      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
       expect(assigns(:answer)).to eq answer
     end
 
     it 'assigns the question' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :json
+      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
       expect(assigns(:question)).to eq question
     end
 
     it 'changes answer attributes' do
-      patch :update, id: answer, question_id: question, answer: { body: 'new body'}, format: :json
+      patch :update, id: answer, question_id: question, answer: { body: 'new body'}, format: :js
       answer.reload
       expect(answer.body).to eq 'new body'
     end
