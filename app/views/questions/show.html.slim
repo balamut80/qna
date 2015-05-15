@@ -35,7 +35,7 @@ div id="question-#{@question.id}" class="question"
       = f.text_area :body
     p Attachments:
     p
-      = f.fields_for :attachments do |a|
+      = f.fields_for :attachments, @answer.attachments.build do |a|
         = a.label :file
         = a.file_field :file
         = a.link_to_remove "Remove"
