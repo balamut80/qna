@@ -27,7 +27,7 @@ feature 'Omniauth' do
 			expect(page).to have_content 'Please fill in the email to complete authorization'
 			fill_in 'auth_info_email', with: ''
 			click_on 'Complete'
-			expect(page).to have_content 'Can\'t authorize user without email'
+			expect(page).to have_content 'Please fill in the email to complete authorization'
 		end
 	end
 
