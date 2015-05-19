@@ -1,0 +1,7 @@
+h1 Please fill in the email to complete authorization
+h2 = flash[:notice]
+p
+  = form_tag confirm_email_path, method: :post do
+    = label_tag "Email"
+    = email_field 'auth[info]', :email
+    = submit_tag "Complete"
