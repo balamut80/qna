@@ -3,10 +3,12 @@ class AttachmentsController < ApplicationController
 	before_action :load_attachment
 	before_action :attachment_owner
 
+	authorize_resource
+
 	respond_to :js, :json
 
 	def destroy
-		@attachment.destroy if @attachment.attachable.user_id == current_user.id
+		@attachment.destroy
 	end
 
 	private

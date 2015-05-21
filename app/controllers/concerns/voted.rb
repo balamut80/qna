@@ -3,17 +3,19 @@ module Voted
 
 	included do
 		before_action :load_voted, only: [:vote, :unvote]
-		before_action :user_can_vote, only: [:vote, :unvote]
+		#before_action :user_can_vote, only: [:vote, :unvote]
 	end
 
 	def vote
-		@resource.vote(current_user, params[:value]) unless @resource.voted_by?(current_user)
+		authorize! :vote, @resource
+		@resource.vote(current_user, params[:value])# unless @resource.voted_by?(current_user)
 		respond_to do |format|
 			format.json { render json: {resource: @resource, total: @resource.total_votes, class: @resource.class.name} }
 		end
 	end
 
 	def unvote
+		authorize! :unvote, @resource
 		@resource.unvote(current_user)
 		respond_to do |format|
 			format.json { render json: {resource: @resource, total: @resource.total_votes, class: @resource.class.name} }
