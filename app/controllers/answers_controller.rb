@@ -2,9 +2,11 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question
   before_action :load_answer, only: [:destroy, :update, :best]
-  before_action :answer_owner, only: [:destroy, :update]
+  #before_action :answer_owner, only: [:destroy, :update]
   before_action :question_owner, only: [:best]
   after_action :publish_answer, only: :create
+
+  authorize_resource
 
   respond_to :html, :js
 

@@ -5,6 +5,8 @@ class QuestionsController < ApplicationController
   before_action :question_owner, only: [:destroy, :update]
   after_action :publish_question, only: [:create]
 
+  authorize_resource
+
   respond_to :html
   respond_to :js, only: :destroy
   respond_to :json, only: :create
