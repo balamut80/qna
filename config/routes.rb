@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
   devise_scope :user do
     post '/confirm_email' => 'omniauth_callbacks#confirm_email'
@@ -24,6 +25,14 @@ Rails.application.routes.draw do
   end
 
   resources :attachments, only: :destroy
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: :index do
+        get :me, on: :collection
+      end
+    end
+  end
 
   root to: 'questions#index'
   # The priority is based upon order of creation: first created -> highest priority.
