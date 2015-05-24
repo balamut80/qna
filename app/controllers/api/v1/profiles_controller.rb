@@ -1,4 +1,5 @@
 class Api::V1::ProfilesController < Api::V1::BaseController
+
 	def index
 		respond_with User.without(current_resource_owner)
 	end
