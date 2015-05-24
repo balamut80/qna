@@ -41,7 +41,8 @@ describe 'Answers API' do
 
 		context 'authorized' do
 			context 'with valid question id' do
-				before { get "/api/v1/questions/#{question.id}/answers/#{answer.id}", format: :json, access_token: access_token.token }
+
+				before { get "/api/v1/answers/#{answer.id}", format: :json, access_token: access_token.token }
 
 				it 'returns 200 status code' do
 					expect(response).to be_success
@@ -78,7 +79,7 @@ describe 'Answers API' do
 		end
 
 		def check_authentication(options = {})
-			get "/api/v1/questions/#{question.id}/answers/#{answer.id}", { format: :json }.merge(options)
+			get "/api/v1/answers/#{answer.id}", { format: :json }.merge(options)
 		end
 	end
 

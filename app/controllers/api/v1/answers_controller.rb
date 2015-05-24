@@ -1,5 +1,7 @@
 class Api::V1::AnswersController < Api::V1::BaseController
-	before_action :load_question
+	authorize_resource
+
+	before_action :load_question, except: :show
 
 	def index
 		respond_with @question.answers.all
@@ -10,12 +12,13 @@ class Api::V1::AnswersController < Api::V1::BaseController
 	end
 
 	def create
-		respond_with @answer = Answer.create(answer_params.merge(question: @question, user: current_resource_owner))
+		@answer = @question.answers.create answer_params.merge(user: current_resource_owner)
+		respond_with @question, @answer
 	end
 
 	private
 	def answer_params
-		params.require(:answer).permit(:body, attachments_attributes: [:file])
+		params.require(:answer).permit(:body)
 	end
 
 	def load_question
