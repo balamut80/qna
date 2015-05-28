@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question, user: @user) }
   let(:answer) { create(:answer, question: question, user: @user) }
+  let(:publish_channel) { '/questions' }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
@@ -57,6 +58,9 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     sign_in_user
+
+    it_behaves_like "private publication"
+
     context 'with valid attributes' do
       it 'saves the new question in the database' do
         expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
@@ -77,6 +81,10 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, question: attributes_for(:invalid_question)
         expect(response).to render_template :new
       end
+    end
+
+    def do_request
+      post :create, question: attributes_for(:question)
     end
   end
 
