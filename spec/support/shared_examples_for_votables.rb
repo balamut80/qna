@@ -5,7 +5,7 @@ shared_examples 'votable' do
 	let!(:user) { create(:user) }
 	let!(:like_user) { create(:user) }
 	let!(:dislike_user) { create(:user) }
-	subject(:votable) { create(described_class.to_s.underscore.to_sym) }
+	subject(:votable) { create(described_class.to_s.underscore.to_sym, user: user) }
 
 	describe 'User votes' do
 

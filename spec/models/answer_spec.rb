@@ -6,9 +6,9 @@ RSpec.describe Answer, type: :model do
 
   let!(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
-  let!(:answers) { create_list(:answer, 5, question: question, best: false) }
-  let!(:best_answer) { create(:answer, question: question, best: false) }
-  let!(:other_best_answer) { create(:answer, question: question) }
+  let!(:answers) { create_list(:answer, 5, question: question, user: user, best: false) }
+  let!(:best_answer) { create(:answer, question: question, user: user, best: false) }
+  let!(:other_best_answer) { create(:answer, question: question, user: user) }
 
   it { should validate_presence_of :body }
   it { should validate_length_of(:body).is_at_least(5).is_at_most(2000) }
@@ -41,7 +41,23 @@ RSpec.describe Answer, type: :model do
       expect(best_answer.best).to eq false
       expect(other_best_answer.best).to eq true
     end
-  end
 
+    context 'reputation' do
+
+      
+
+      it 'make best changes user reputation +3' do
+        subject { build(:answer, question: question, user: user, best: false) }
+        expect { subject.best! }.to change{user.reputation}.by 3
+        subject.destroy
+      end
+
+      it 'remove make best rollback user reputation' do
+        subject { build(:answer, question: question, user: user, best: false) }
+        expect { subject.best! }.to change{user.reputation}.by 0
+        subject.destroy
+      end
+    end
+  end
 
 end
