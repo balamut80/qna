@@ -44,7 +44,7 @@ RSpec.describe Answer, type: :model do
 
     context 'reputation' do
 
-      
+
 
       it 'make best changes user reputation +3' do
         subject { build(:answer, question: question, user: user, best: false) }
