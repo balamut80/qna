@@ -1,12 +1,12 @@
 class Reputation
 
 	VALUES = {
-			:create_answer   => 1,
-			:vote_question   => 2,
-			:unvote_question => -2,
-			:vote_answer     => 1,
-			:unvote_answer   => -1,
-			:best_answer     => 3,
+			create_answer: 1,
+			vote_question: 2,
+			unvote_question: -2,
+			vote_answer: 1,
+			unvote_answer: -1,
+			best_answer: 3
 	}
 
 	def self.calculate(user, action, rollback = false)
