@@ -2,17 +2,7 @@ require 'rails_helper'
 
 describe 'Profile API' do
 	describe 'GET /me' do
-		context 'unauthorized' do
-			it 'returns 401 status if there is no access_token' do
-				get '/api/v1/profiles/me', format: :json
-				expect(response.status).to eq 401
-			end
-
-			it 'returns 401 status if access_token is invalid' do
-				get '/api/v1/profiles/me', format: :json, access_token: '1234'
-				expect(response.status).to eq 401
-			end
-		end
+		it_behaves_like "check API Authentication"
 
 		context 'authorized' do
 			let(:me) { create(:user) }
@@ -35,14 +25,22 @@ describe 'Profile API' do
 					expect(response.body).to_not have_json_path(attr)
 				end
 			end
+
+		end
+
+		def check_authentication(options = {})
+			get '/api/v1/profiles/me', { format: :json}.merge(options)
 		end
 	end
 
 	describe 'GET /index' do
+
+		it_behaves_like "check API Authentication"
+
 		context 'authorized' do
 			let!(:me) { create :user }
 			let(:access_token) { create :access_token, resource_owner_id: me.id }
-			let!(:users) { create_list :user, 2 }
+			let!(:users) { create_list :user, 3 }
 
 			before { get '/api/v1/profiles/', format: :json, access_token: access_token.token }
 
@@ -51,9 +49,13 @@ describe 'Profile API' do
 			end
 
 			it 'returns list of users except resource owner' do
-				expect(response.body).to be_json_eql(users.to_json)
-				expect(response.body).to_not include_json(me.to_json)
+				expect(response.body).to be_json_eql(users.to_json).at_path('profiles')
+				expect(response.body).to_not include_json(me.to_json).at_path('profiles')
 			end
+		end
+
+		def check_authentication(options = {})
+			get '/api/v1/profiles/', { format: :json}.merge(options)
 		end
 	end
 end
