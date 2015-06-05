@@ -43,8 +43,6 @@ class Answer < ActiveRecord::Base
   end
 
   def notify_question_subscribers
-    question.subscribers do |subscriber|
-      SubscriptionMailer.question(subscriber, self).deliver_later
-    end
+    NotifySubscribersJob.perform_later(self)
   end
 end

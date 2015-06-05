@@ -60,6 +60,7 @@ RSpec.describe Answer, type: :model do
 
     context 'notify ' do
       let!(:subscriber) { create :user }
+      let!(:other_subscriber) { create :user }
 
       it 'question author when created new answer' do
         expect(AuthorMailer).to receive(:answer).with(question.user).and_call_original
@@ -68,8 +69,12 @@ RSpec.describe Answer, type: :model do
 
       it 'subscribers when created new answer' do
           question.subscribers << subscriber
-          expect(SubscriptionMailer).to receive(:question).with(subscriber, answer).exactly(2).and_call_original
-          create(:answer, question: question)
+          question.subscribers << other_subscriber
+
+          question.subscribers.each do |subscriber|
+            expect(SubscriptionMailer).to receive(:question).with(subscriber, answer).and_call_original
+          end
+          answer.save
         end
     end
 

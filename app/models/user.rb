@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
     find_each.each do |user|
       DailyMailer.digest(user).deliver_later
     end
-   end
+  end
 
   def create_authorization(auth)
     self.authorizations.create(provider: auth.provider, uid: auth.uid)
