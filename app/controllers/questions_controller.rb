@@ -18,6 +18,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @subscription = @question.subscriptions.find_by user: current_user || Subscription.new
     respond_with @question
   end
 

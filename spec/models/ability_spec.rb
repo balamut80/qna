@@ -28,7 +28,8 @@ describe Ability do
 		let(:other_answer) { create :answer, user: other, question: other_question }
 		let(:attachment) { create :attachment, attachable: question }
 		let(:other_attachment) { create :attachment, attachable: other_question }
-
+		let(:subscription) { create :subscription, user: user, question: question }
+		let(:other_subscription) { create :subscription, user: other, question: other_question }
 
 		it { should_not be_able_to :manage, :all }
 		it { should be_able_to :read, :all }
@@ -36,6 +37,7 @@ describe Ability do
 		it { should be_able_to :create, Question }
 		it { should be_able_to :create, Answer }
 		it { should be_able_to :create, Comment }
+		it { should be_able_to :create, Subscription }
 
 		it { should be_able_to :update, question, user: user }
 		it { should_not be_able_to :update, other_question, user: user }
@@ -62,5 +64,9 @@ describe Ability do
 
 		it { should_not be_able_to :unvote, question, user: user }
 		it { should_not be_able_to :unvote, answer, user: user }
+
+		it { should be_able_to :destroy, subscription, user: user }
+		it { should_not be_able_to :destroy, other_subscription, user: user }
+
 	end
 end
