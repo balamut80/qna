@@ -1,5 +1,5 @@
 class SubscriptionsController < ApplicationController
-  before_action :authenticate_user!
+	before_action :authenticate_user!
 	before_action :load_question, only: [:create, :destroy]
 	before_action :load_subscription, only: :destroy
 
@@ -20,6 +20,6 @@ class SubscriptionsController < ApplicationController
 	end
 
 	def load_subscription
-	  @subscription = Subscription.find(params[:id])
+		@subscription = Subscription.find(params[:id])
 	end
 end

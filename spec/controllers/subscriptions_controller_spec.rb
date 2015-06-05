@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe SubscriptionsController, type: :controller do
-	describe SubscriptionsController do
+  describe SubscriptionsController do
 
-	  describe 'POST #create' do
-	    let(:user) { create :user }
-			let(:question) { create :question }
+    describe 'POST #create' do
+      let(:user) { create :user }
+      let(:question) { create :question }
 
-	    context 'Non authenticated user' do
-				it 'cannot create subscriptions' do
+      context 'Non authenticated user' do
+        it 'cannot create subscriptions' do
           expect { post :create, question_id: question, format: :js }.to_not change(Subscription, :count)
         end
       end
@@ -42,7 +42,7 @@ RSpec.describe SubscriptionsController, type: :controller do
         before { sign_in(user) }
 
         it 'deletes subscriptions' do
-					expect { delete :destroy, question_id: question, id: subscription, format: :js }.to change { Subscription.count }.by(-1)
+          expect { delete :destroy, question_id: question, id: subscription, format: :js }.to change { Subscription.count }.by(-1)
         end
 
         it 'renders destroy template' do
@@ -50,6 +50,6 @@ RSpec.describe SubscriptionsController, type: :controller do
           expect(response).to render_template :destroy
         end
       end
-		end
-	end
+    end
+  end
 end

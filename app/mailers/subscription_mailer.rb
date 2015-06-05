@@ -1,7 +1,7 @@
 class SubscriptionMailer < ActionMailer::Base
 	default from: "from@example.com"
 
-	def question(subscriber, answer)
+	def answer(subscriber, answer)
 		@answer = answer
 		mail to: subscriber.email
 	end
