@@ -16,3 +16,4 @@
 config/private_pub.yml
 config/database.yml
 .idea
+dump.rdb
