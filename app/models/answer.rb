@@ -7,6 +7,8 @@ class Answer < ActiveRecord::Base
   has_many :comments, as: :commentable
 
   after_create :calculate_reputation
+  after_create :notify_answer
+  after_create :notify_question_subscribers
   before_destroy :rollback_reputation
 
   accepts_nested_attributes_for :attachments
@@ -36,5 +38,11 @@ class Answer < ActiveRecord::Base
     Reputation.calculate(self.user, :create_answer, true)
   end
 
+  def notify_answer
+    AuthorMailer.answer(self).deliver_later
+  end
 
+  def notify_question_subscribers
+    NotifySubscribersJob.perform_later(self)
+  end
 end

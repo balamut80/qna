@@ -6,6 +6,7 @@ RSpec.describe Answer, type: :model do
 
   let!(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
+  let!(:answer) { create(:answer, question: question, user: user) }
   let!(:answers) { create_list(:answer, 5, question: question, user: user, best: false) }
   let!(:best_answer) { create(:answer, question: question, user: user, best: false) }
   let!(:other_best_answer) { create(:answer, question: question, user: user) }
@@ -44,8 +45,6 @@ RSpec.describe Answer, type: :model do
 
     context 'reputation' do
 
-
-
       it 'make best changes user reputation +3' do
         subject { build(:answer, question: question, user: user, best: false) }
         expect { subject.best! }.to change{user.reputation}.by 3
@@ -58,6 +57,26 @@ RSpec.describe Answer, type: :model do
         subject.destroy
       end
     end
-  end
 
+    context 'notify ' do
+      let!(:subscriber) { create :user }
+      let!(:other_subscriber) { create :user }
+
+      it 'question author when created new answer' do
+        expect(AuthorMailer).to receive(:answer).with(question.user).and_call_original
+        answer.save
+      end
+
+      it 'subscribers when created new answer' do
+          question.subscribers << subscriber
+          question.subscribers << other_subscriber
+
+          question.subscribers.each do |subscriber|
+            expect(SubscriptionMailer).to receive(:question).with(subscriber, answer).and_call_original
+          end
+          answer.save
+        end
+    end
+
+  end
 end

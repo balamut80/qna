@@ -1,0 +1,6 @@
+p Hello, subscriber
+
+p There is new answer to your question:
+  = link_to @answer.question.title, question_url(@answer.question)
+
+  p= @answer.body

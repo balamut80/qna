@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :authorizations
+  has_many :subscriptions, dependent: :destroy
 
   scope :without, ->(user) { where.not(id: user) }
 
@@ -27,6 +28,12 @@ class User < ActiveRecord::Base
       user.create_authorization(auth)
     end
     user
+  end
+
+  def self.send_daily_digest
+    find_each.each do |user|
+      DailyMailer.digest(user).deliver_later
+    end
   end
 
   def create_authorization(auth)

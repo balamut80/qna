@@ -1,0 +1,8 @@
+p Hello, user
+
+- if @questions.any?
+  p The list of new questions asked yesterday:
+    - @questions.each do |question|
+      = link_to question.title, question_url(question)
+- else
+  p There were no questions yesterday =(
