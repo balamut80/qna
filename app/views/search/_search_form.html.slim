@@ -1,0 +1,6 @@
+= form_for :search, url: search_path, method: :get do |f|
+  .form-group
+    = f.text_field :query, placeholder: 'Search'
+  .form-group
+    = select_tag(:filter, options_for_select(Search::SPHINX_INDICES, params[:filter]), prompt: 'Everywhere')
+    = f.submit 'Search'

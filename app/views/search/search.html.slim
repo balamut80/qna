@@ -1,0 +1,10 @@
+.search-results
+- if @search_results
+  p
+    - @search_results.each do |result|
+      - if result.try(:body)
+        = result.body
+      - else
+        = result.email
+- else
+  | Nothing found
