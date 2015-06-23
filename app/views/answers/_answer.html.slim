@@ -1,37 +1,38 @@
 - if answer.persisted?
-  li class="answer_row"
-    div id="answer-#{answer.id}" class="answer"
-      - if answer.best
-        h4= 'This is the best answer!'
+  - cache answer do
+    li class="answer_row"
+      div id="answer-#{answer.id}" class="answer"
+        - if answer.best
+          h4= 'This is the best answer!'
 
-      div class="answer-body" = answer.body
-      div class="total-votes" = answer.total_votes
-      - if user_signed_in? && current_user.id != answer.user_id
-        div class="vote"
-          - if answer.voted_by?(current_user)
-            p= link_to 'Unvote', unvote_question_answer_path(@question.id, answer), class: 'unvote-link', method: :post, remote: true
-          - else
-            p= link_to 'Like', vote_question_answer_path(@question.id, answer, value: 1), class: 'vote-link', method: :post, remote: true
-            p= link_to 'Dislike', vote_question_answer_path(@question.id, answer, value: -1), class: 'vote-link', method: :post, remote: true
+        div class="answer-body" = answer.body
+        div class="total-votes" = answer.total_votes
+        - if user_signed_in? && current_user.id != answer.user_id
+          div class="vote"
+            - if answer.voted_by?(current_user)
+              p= link_to 'Unvote', unvote_question_answer_path(@question.id, answer), class: 'unvote-link', method: :post, remote: true
+            - else
+              p= link_to 'Like', vote_question_answer_path(@question.id, answer, value: 1), class: 'vote-link', method: :post, remote: true
+              p= link_to 'Dislike', vote_question_answer_path(@question.id, answer, value: -1), class: 'vote-link', method: :post, remote: true
 
-      ul class="answer-attachments"
-        - answer.attachments.each do |a|
-          li id="attachment-#{a.id}"
-            = link_to a.file.identifier, a.file.url
-            '  -
-            - if user_signed_in? && current_user.id == @question.user_id
-              = link_to 'remove', a, remote: true, method: :delete
-      - if user_signed_in? && current_user.id == answer.user_id
-        p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-        p
-          = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}"} do |f|
-            = f.label :body, "Answer"
-            = f.text_area :body
+        ul class="answer-attachments"
+          - answer.attachments.each do |a|
+            li id="attachment-#{a.id}"
+              = link_to a.file.identifier, a.file.url
+              '  -
+              - if user_signed_in? && current_user.id == @question.user_id
+                = link_to 'remove', a, remote: true, method: :delete
+        - if user_signed_in? && current_user.id == answer.user_id
+          p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+          p
+            = form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}"} do |f|
+              = f.label :body, "Answer"
+              = f.text_area :body
 
-            = f.submit 'Save'
-        p= link_to 'Delete answer', question_answer_path(@question, answer), method: :delete, remote: true
-      - if user_signed_in? && current_user.id == @question.user_id && !answer.best
-        p= link_to 'Mark as best answer!', best_question_answer_path(@question, answer), method: :put, remote: true
+              = f.submit 'Save'
+          p= link_to 'Delete answer', question_answer_path(@question, answer), method: :delete, remote: true
+        - if user_signed_in? && current_user.id == @question.user_id && !answer.best
+          p= link_to 'Mark as best answer!', best_question_answer_path(@question, answer), method: :put, remote: true
 
-        p= render 'comments/index', resource: answer
-        p= render 'comments/form', resource: answer
+          p= render 'comments/index', resource: answer
+          p= render 'comments/form', resource: answer
