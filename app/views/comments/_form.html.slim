@@ -1,7 +1,8 @@
 - if user_signed_in?
-  div id="create-#{resource.class.name.downcase}-comment"
-    = link_to 'Comment that', '', class: 'create-comment-link', data: { resource_id: resource.id, resource_type: resource.class.name.downcase }
-    = form_for [resource, resource.comments.new], data: { type: :json }, html: { id: "comment-for-#{resource.class.name.downcase}-#{resource.id}" , style: "display: none" }, remote: true do |f|
-      p= f.label :body, 'Comment'
-      p= f.text_area :body
-      p= f.submit 'Create comment'
+  - cache ['comment_form', resource] do
+    div id="create-#{resource.class.name.downcase}-comment"
+      = link_to 'Comment that', '', class: 'create-comment-link', data: { resource_id: resource.id, resource_type: resource.class.name.downcase }
+      = form_for [resource, resource.comments.new], data: { type: :json }, html: { id: "comment-for-#{resource.class.name.downcase}-#{resource.id}" , style: "display: none" }, remote: true do |f|
+        p= f.label :body, 'Comment'
+        p= f.text_area :body
+        p= f.submit 'Create comment'

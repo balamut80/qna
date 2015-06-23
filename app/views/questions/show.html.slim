@@ -1,48 +1,50 @@
-div id="question-#{@question.id}" class="question"
-  h1= @question.title
+- cache @question do
+  div id="question-#{@question.id}" class="question"
+    h1= @question.title
 
-  div class="total-votes" = @question.total_votes
-  - if user_signed_in? && current_user.id != @question.user_id
-    div class="vote"
-      - if @question.voted_by?(current_user)
-        p= link_to 'Unvote', unvote_question_path(@question), class: 'unvote-link', method: :post, remote: true
-      - else
-        p= link_to 'Like', vote_question_path(@question, value: 1), class: 'vote-link', method: :post, remote: true
-        p= link_to 'Dislike', vote_question_path(@question, value: -1), class: 'vote-link', method: :post, remote: true
+    div class="total-votes" = @question.total_votes
+    - if user_signed_in? && current_user.id != @question.user_id
+      div class="vote"
+        - if @question.voted_by?(current_user)
+          p= link_to 'Unvote', unvote_question_path(@question), class: 'unvote-link', method: :post, remote: true
+        - else
+          p= link_to 'Like', vote_question_path(@question, value: 1), class: 'vote-link', method: :post, remote: true
+          p= link_to 'Dislike', vote_question_path(@question, value: -1), class: 'vote-link', method: :post, remote: true
 
-  p= render 'subscriptions/subscribe_action_links', question: @question
+    p= render 'subscriptions/subscribe_action_links', question: @question
 
-  p= @question.body
+    p= @question.body
 
-  p Attachments:
-  ul class="question-attachments"
-    - @question.attachments.each do |a|
-      li id="attachment-#{a.id}"
-        = link_to a.file.identifier, a.file.url
-        '  -
-        - if user_signed_in? && current_user.id == @question.user_id
-          = link_to 'remove', a, remote: true, method: :delete
-
-
-  p= render 'comments/index', resource: @question
-  p= render 'comments/form', resource: @question
-
-  h3 Answers
-  ul class="answers" data-question-id=@question.id = render @question.answers
-
-  = nested_form_for [@question, @answer], remote: true, data: { type: :json } do |f|
-    .answer-errors
-    p
-      = f.label :body, 'Text'
-      = f.text_area :body
     p Attachments:
-    p
-      = f.fields_for :attachments, @answer.attachments.build do |a|
-        = a.label :file
-        = a.file_field :file
-        = a.link_to_remove "Remove"
-      = f.link_to_add 'Add file', :attachments
-    = f.submit
+    ul class="question-attachments"
+      - cache collection_cache_key_for :attachment do
+        - @question.attachments.each do |a|
+          li id="attachment-#{a.id}"
+            = link_to a.file.identifier, a.file.url
+            '  -
+            - if user_signed_in? && current_user.id == @question.user_id
+              = link_to 'remove', a, remote: true, method: :delete
+
+
+    p= render 'comments/index', resource: @question
+    p= render 'comments/form', resource: @question
+
+    h3 Answers
+    ul class="answers" data-question-id=@question.id = render @question.answers
+
+    = nested_form_for [@question, @answer], remote: true, data: { type: :json } do |f|
+      .answer-errors
+      p
+        = f.label :body, 'Text'
+        = f.text_area :body
+      p Attachments:
+      p
+        = f.fields_for :attachments, @answer.attachments.build do |a|
+          = a.label :file
+          = a.file_field :file
+          = a.link_to_remove "Remove"
+        = f.link_to_add 'Add file', :attachments
+      = f.submit
 
   = subscribe_to "/questions/#{@question.id}/answers"
   = subscribe_to "/questions/#{@question.id}/comments"
